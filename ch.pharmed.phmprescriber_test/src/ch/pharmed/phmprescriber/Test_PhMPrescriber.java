@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 
 
@@ -26,18 +27,14 @@ public class Test_PhMPrescriber {
 
 	private static void getPhysicianInformationShouldReturnPhysicianAttributes() {
 		
-		System.out.println("Test Physician");
-	
 		Physician phys = new Physician();
-		
-		System.out.println(phys.getZsrid());
-		System.out.println(phys.getLastname());
-		
 		phys.getAttributesFromWeb("U038713");
-		System.out.println(phys.getLastname());
+		assertEquals("U038713", phys.getZsrid());
+		assertEquals("Strub", phys.getLastname());
 		
 		phys.getAttributesFromWeb("U 0387.13");
-		System.out.println(phys.getLastname());
+		assertEquals("Strub", phys.getLastname());
+		assertEquals("U 0387.13", phys.getZsrid());
 		
 	}
 	
