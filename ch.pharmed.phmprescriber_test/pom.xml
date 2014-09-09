@@ -17,10 +17,7 @@
         <artifactId>tycho-surefire-plugin</artifactId>
         <version>${tycho-version}</version>
         <configuration>
-          <stringAttribute key="product" value="ch.elexis.core.application.product"/>
-          <!--application>ch.elexis.core.application.ElexisApp</application-->
-          <product>ch.elexis.ElexisProduct</product>
-          <!--product>ch.elexis.core.application.product</product-->
+          <application>ch.elexis.core.application.ElexisApp</application>
           <argLine>-debug -DjdbcLink=org.h2.Driver:mem:mem_test;AUTO_SERVER=TRUE -Dch.elexis.username=007 -Dch.elexis.password=topsecret -Delexis-run-mode=RunFromScratch</argLine>
           <useUIThread>true</useUIThread>
           <useUIHarness>true</useUIHarness>
