@@ -17,7 +17,9 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Shell;
 
+import ch.elexis.core.data.events.ElexisEventDispatcher;
 import ch.elexis.core.data.interfaces.IOutputter;
+import ch.elexis.data.Rezept;
 
 
 public class PhMRpActions  implements IAction, IOutputter {
@@ -167,7 +169,9 @@ public class PhMRpActions  implements IAction, IOutputter {
 	public void runWithEvent(Event event) {
 		
 		// TODO Auto-generated method stub
-		Sender sender = new Sender();
+		Rezept rp = (Rezept) ElexisEventDispatcher.getSelected(Rezept.class);
+		Physician ph = new Physician();
+		Sender sender = new Sender(rp,ph);
 		sender.sendnprint();
 		
 		

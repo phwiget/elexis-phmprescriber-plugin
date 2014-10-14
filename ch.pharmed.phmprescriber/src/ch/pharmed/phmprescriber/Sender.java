@@ -10,7 +10,7 @@ import java.math.BigInteger;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
-
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.text.ParseException;
@@ -25,7 +25,7 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 
-import ch.elexis.core.data.events.ElexisEventDispatcher;
+
 import ch.elexis.core.ui.UiDesk;
 import ch.elexis.core.ui.util.SWTHelper;
 import ch.elexis.data.Artikel;
@@ -52,18 +52,20 @@ public class Sender  {
 	private String QRCode;
 	
 	//Constructor
-	public Sender() {
+	public Sender(Rezept pres, Physician phys) {
 		
-		ph = new Physician();
-		rp = (Rezept) ElexisEventDispatcher.getSelected(Rezept.class);
+		ph = phys;
+		this.rp = pres;
+//		rp = (Rezept) ElexisEventDispatcher.getSelected(Rezept.class);
 		
 		if (!(rp == null))
 			pat= rp.getPatient();
-		
+
 	}
 	
 	//Send the prescriptions via SOAP-Service
 	public void sendnprint() {
+
 		
 		//(1) Validate Input
 		if (isInputValid() == false) {
@@ -100,7 +102,7 @@ public class Sender  {
 		
 		}
 		
-		//(2) Check Interaction if enabled
+		//(3) Check Interaction if enabled
 		String strCFG = CoreHub.globalCfg.get(Constants.CFG_INTERATCIONS, "");
 				
 		//If so, run the check
@@ -108,20 +110,28 @@ public class Sender  {
 			
 			Interaction IA = new Interaction();
 			
-			if (IA.checkPrescription(rp) == false) {
-				
-				
-				return;
-			}
+			List<String> interactions = IA.checkPrescription(rp);
 			
+			if (interactions != null) {
+							
+				//Prepare the window to display 
 				
-		}
-		
-		//(3) Show display with the potential shops to send the prescription to
-		
+				IADialog dialog = new IADialog(shell);
+				dialog.setProductDescr(interactions);
+					
+				dialog.create();
+					
+					if (dialog.open() != Window.OK) {
+					 
+					return;
+					}
+				
+			};
+				
 	
-		
-		
+		}
+			
+			
 		//(3) Post the prescription and obtain the id and QR-Code String
 		if (postPrescription() == false) {
 			SWTHelper
@@ -181,7 +191,7 @@ public class Sender  {
 		return null;
 	}
 	
-	private Boolean postPrescription() {
+	public Boolean postPrescription() {
 
 		String defaultDateFormat ="dd.MM.yyyy";
 

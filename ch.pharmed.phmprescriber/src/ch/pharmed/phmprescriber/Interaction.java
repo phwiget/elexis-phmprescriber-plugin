@@ -6,10 +6,6 @@ package ch.pharmed.phmprescriber;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.jface.window.Window;
-import org.eclipse.swt.widgets.Shell;
-
-import ch.elexis.core.ui.UiDesk;
 import ch.elexis.data.Rezept;
 import ch.pharmedsolutions.www.interactionservice.InteractionPortType;
 import ch.pharmedsolutions.www.interactionservice.InteractionRequest;
@@ -20,7 +16,6 @@ import ch.pharmedsolutions.www.interactionservice.Interactions;
 public class Interaction {
 
 	
-
 		public Interaction() {
 			
 			// TODO Auto-generated constructor stub
@@ -29,13 +24,13 @@ public class Interaction {
 		}
 		
 	//Check a prescription for interactions
-		public Boolean checkPrescription(Rezept rp){
+		public List<String> checkPrescription(Rezept rp){
 			
 							
 			//If only 1 product, don't run the check an proceed normally
 			 if  (rp.getLines().size() < 2) {
 				 
-				 return true;
+				 return null;
 			 }
 			
 			 
@@ -64,24 +59,8 @@ public class Interaction {
 	            
 				 if (!(interactions == null) && interactions.getInteractions().getInteraction().size() > 0) {
 					
-					 
-					//Prepare the window to display 
-					Shell shell = UiDesk.getDisplay().getActiveShell();
-				    
-					IADialog dialog = new IADialog(shell);
-					dialog.setProductDescr(getDescription(rp,interactions, atc_codes));
-					
-					dialog.create();
-					
-					if (dialog.open() == Window.OK) {
-					 
-						return true;
-						
-					} 
-						
-							
-					return false;
-							
+					 return getDescription(rp,interactions, atc_codes);
+
 				
 				};
 				 
@@ -93,9 +72,12 @@ public class Interaction {
 	       }
 		    
 		    
-			return true;
+			return null;
 			
 		}
+		
+		
+		
 		
 		private Interactions consumService(InteractionRequest IAReqest) {
 			
