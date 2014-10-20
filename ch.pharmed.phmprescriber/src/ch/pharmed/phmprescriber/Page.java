@@ -22,6 +22,8 @@ import java.awt.print.PrinterException;
 import java.text.AttributedCharacterIterator;
 import java.text.AttributedString;
 import java.util.Hashtable;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 import ch.elexis.data.Artikel;
 import ch.elexis.data.Patient;
@@ -32,23 +34,23 @@ class Page implements Printable
 {    
 	
   //Fonts
-  private static Font fnt = new Font("Helvetica",Font.PLAIN,8);
-  private static Font fntBold = new Font("Helvetica",Font.BOLD,8);
-  private static Font fntItalic = new Font("Helvetica",Font.ITALIC,8);
-  private static Font fntTitle = new Font("Helvetica",Font.BOLD,11);
+  private static Font fnt = new Font("Helvetica",Font.PLAIN,8); //$NON-NLS-1$
+  private static Font fntBold = new Font("Helvetica",Font.BOLD,8); //$NON-NLS-1$
+  private static Font fntItalic = new Font("Helvetica",Font.ITALIC,8); //$NON-NLS-1$
+  private static Font fntTitle = new Font("Helvetica",Font.BOLD,11); //$NON-NLS-1$
   
   //Message-Constants
-  private static final String PHONE = "Tel: ";
-  private static final String FAX = "Fax: ";
+  private String PHONE;
+  private String FAX;
   
-  private static final String EAN = "EAN: ";
-  private static final String ZSR = "ZSR: ";
+  private String EAN;
+  private String ZSR;
   
-  private static final String TITLE = "Rezept";
-  private static final String BORN = "geb. ";
-  private static final String REPETITION = "Dauerrezept bis: ";
+  private String TITLE;
+  private String BORN;
+  private String REPETITION;
   
-  private static final String PROMO = "https://www.pharmedsolutions.ch";
+  private static final String PROMO = "https://www.pharmedsolutions.ch"; //$NON-NLS-1$
   
   //Layout-Constants
   private final double LMARGINRATIO = 0.3; 
@@ -73,6 +75,8 @@ class Page implements Printable
   private int firstProd = 0;
   private int lastProd = 0;
   
+  private ResourceBundle messages;
+  
   public Page(Physician ph, Rezept rp, String presID,String QRCode, Integer firstProductIndex, Integer lastProductIndex){
 	  
 	  this.ph = ph;
@@ -82,6 +86,18 @@ class Page implements Printable
 	  this.QRCode = QRCode;
 	  this.firstProd = firstProductIndex;
 	  this.lastProd = lastProductIndex;
+	  
+	  this.messages = ResourceBundle.getBundle("ch.pharmed.phmprescriber.MessagesBundle", new Locale("de", "CH")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+	  
+	  this.PHONE = messages.getString("Page_4");
+	  this.FAX = messages.getString("Page_5");
+	  
+	  this.EAN = messages.getString("Page_6");
+	  this.ZSR = messages.getString("Page_7");
+	  
+	  this.TITLE = messages.getString("Page_8");
+	  this.BORN = messages.getString("Page_9");
+	  this.REPETITION = messages.getString("Page_10");
 	  
 	  
   }
@@ -142,7 +158,7 @@ class Page implements Printable
 	      metrics = g.getFontMetrics(fntBold);
 	      intMeasureY += metrics.getHeight();
 	      
-	      g.drawString(ph.getTitle() + " " + ph.getFirstname() + " " + ph.getLastname(),intMarginLeft,intMeasureY);
+	      g.drawString(ph.getTitle() + " " + ph.getFirstname() + " " + ph.getLastname(),intMarginLeft,intMeasureY); //$NON-NLS-1$ //$NON-NLS-2$
 	      
 	     
 	      //Set font to default
@@ -167,11 +183,11 @@ class Page implements Printable
 	      
 	      intMeasureY +=intSpace;
 	    	  
-	      g.drawString(ph.getStreet() + " " + ph.getPostbox(),intMarginLeft,intMeasureY);
+	      g.drawString(ph.getStreet() + " " + ph.getPostbox(),intMarginLeft,intMeasureY); //$NON-NLS-1$
 	     
 	      intMeasureY +=intDefaultHeight;
 	      
-	      g.drawString(ph.getZip() + " " + ph.getCity(),intMarginLeft,intMeasureY);
+	      g.drawString(ph.getZip() + " " + ph.getCity(),intMarginLeft,intMeasureY); //$NON-NLS-1$
 	      
 	      intMeasureY += intSpace;
 	      
@@ -233,13 +249,13 @@ class Page implements Printable
 	      //-- (5) Patient
 	      g.setFont(fntBold);
 	      
-	      g.drawString(pat.getName() + " " + pat.getVorname(), intMarginLeft, intMeasureY);
+	      g.drawString(pat.getName() + " " + pat.getVorname(), intMarginLeft, intMeasureY); //$NON-NLS-1$
 	      
 	      metrics = g.getFontMetrics(fntBold);
-	      int xPat = intMarginLeft + metrics.stringWidth(pat.getName() + " " + pat.getVorname());
+	      int xPat = intMarginLeft + metrics.stringWidth(pat.getName() + " " + pat.getVorname()); //$NON-NLS-1$
 	      
 	      g.setFont(fnt);
-	      g.drawString(", " + BORN + pat.getGeburtsdatum(), xPat, intMeasureY);
+	      g.drawString(", " + BORN + pat.getGeburtsdatum(), xPat, intMeasureY); //$NON-NLS-1$
 	      
 	      intMeasureY +=intSpaceBig + intSpace;
 	      
@@ -258,7 +274,7 @@ class Page implements Printable
 				
 										  			 
 				 AttributedString attributedString = new AttributedString(
-						 "1x " + article.getLabel(), hash);
+						 "1x " + article.getLabel(), hash); //$NON-NLS-1$
 				  
 				  attributedString.addAttribute(TextAttribute.FONT, fntBold);
 				  
@@ -297,7 +313,7 @@ class Page implements Printable
 			    
 			    if (actualLine.getDosis().length() > 0 ){
 			    	
-			    	label = actualLine.getDosis() + ", " + label;
+			    	label = actualLine.getDosis() + ", " + label; //$NON-NLS-1$
 			    	
 			    }
 			    

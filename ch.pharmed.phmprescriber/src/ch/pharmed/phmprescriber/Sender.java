@@ -11,6 +11,8 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.text.ParseException;
@@ -24,6 +26,9 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
+
+
+
 
 
 import ch.elexis.core.ui.UiDesk;
@@ -46,10 +51,13 @@ public class Sender  {
 	private Physician ph;
 	private Rezept rp;
 	private Patient pat;
-	private String GLN = "";
+	private String GLN = ""; //$NON-NLS-1$
 	
 	private String presID;
 	private String QRCode;
+	
+	private ResourceBundle messages;
+	
 	
 	//Constructor
 	public Sender(Rezept pres, Physician phys) {
@@ -60,7 +68,22 @@ public class Sender  {
 		
 		if (!(rp == null))
 			pat= rp.getPatient();
-
+		
+		//Set the default language
+        messages = ResourceBundle.getBundle("ch.pharmed.phmprescriber.MessagesBundle", new Locale("de", "CH")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		
+	}
+	
+	public void setLanguage(Locale currentLocale) {
+		
+        messages = ResourceBundle.getBundle("ch.pharmed.phmprescriber.MessagesBundle", currentLocale); //$NON-NLS-1$
+				
+	}
+	
+	public ResourceBundle getMessages() {
+		
+		return this.messages;
+		
 	}
 	
 	//Send the prescriptions via SOAP-Service
@@ -86,8 +109,8 @@ public class Sender  {
 		    
 					ElementListSelectionDialog dialog =   new ElementListSelectionDialog(shell, new LabelProvider());
 							dialog.setElements(ShopNames);
-							dialog.setTitle("Apothekenauswahl");
-							dialog.setMessage("Wählen Sie bitte die Empfangsapotheke aus. Sie können die Apotheke mit einem Doppelklick bestätigen.");
+							dialog.setTitle(messages.getString("Sender_5"));
+							dialog.setMessage(messages.getString("Sender_6"));
 							dialog.setMultipleSelection(false);
 							dialog.setAllowDuplicates(false);
 					
@@ -103,10 +126,10 @@ public class Sender  {
 		}
 		
 		//(3) Check Interaction if enabled
-		String strCFG = CoreHub.globalCfg.get(Constants.CFG_INTERATCIONS, "");
+		String strCFG = CoreHub.globalCfg.get(Constants.CFG_INTERATCIONS, ""); //$NON-NLS-1$
 				
 		//If so, run the check
-		if (strCFG.equals("true")) {
+		if (strCFG.equals("true")) { //$NON-NLS-1$
 			
 			Interaction IA = new Interaction();
 			
@@ -118,7 +141,8 @@ public class Sender  {
 				
 				IADialog dialog = new IADialog(shell);
 				dialog.setProductDescr(interactions);
-					
+				dialog.setResourceBundle(messages);	
+				
 				dialog.create();
 					
 					if (dialog.open() != Window.OK) {
@@ -135,8 +159,8 @@ public class Sender  {
 		//(3) Post the prescription and obtain the id and QR-Code String
 		if (postPrescription() == false) {
 			SWTHelper
-			.alert("Fehler",
-				"Die Übertragung hat nicht geklappt, bitte erneut versuchen.");
+			.alert(messages.getString("Sender_9"),
+				messages.getString("Sender_10"));
 			
 			return;
 		}
@@ -154,8 +178,8 @@ public class Sender  {
 		//(1) is there a prescription object?
 		if (rp == null) {
 			SWTHelper
-			.alert("Fehler",
-				"Es wurde kein Rezept gewählt.");
+			.alert(messages.getString("Sender_11"),
+				messages.getString("Sender_12"));
 			return false;
 		}
 			
@@ -163,8 +187,8 @@ public class Sender  {
 		System.out.println(ph.getZsrid().length());
 		if (ph.getZsrid().length() < 7) {
 			SWTHelper
-			.alert("Fehler",
-				"Bitte registrieren Sie Ihre korrekte ZSR-Nummer unter 'Datei->Einstellungen->Datenaustausch->Rezeptübermittlung'.");
+			.alert(messages.getString("Sender_13"),
+				messages.getString("Sender_14"));
 			return false;
 			
 		}
@@ -193,7 +217,7 @@ public class Sender  {
 	
 	public Boolean postPrescription() {
 
-		String defaultDateFormat ="dd.MM.yyyy";
+		String defaultDateFormat ="dd.MM.yyyy"; //$NON-NLS-1$
 
 		//------General attributes-------------
 		ch.pharmedsolutions.www.rezeptserver.Prescription prescription = new ch.pharmedsolutions.www.rezeptserver.Prescription();
@@ -239,7 +263,7 @@ public class Sender  {
 	    	
 	    	//Check, if posology has the right format
 	    	Pattern pattern = 
-	                Pattern.compile("([0-9.]{1,5})([-])([0-9.]{1,5})([-])([0-9.]{1,5})([-])([0-9.]{0,5})([0-9])");
+	                Pattern.compile("([0-9.]{1,5})([-])([0-9.]{1,5})([-])([0-9.]{1,5})([-])([0-9.]{0,5})([0-9])"); //$NON-NLS-1$
 
 	        Matcher matcher = 
 	                pattern.matcher(actualLine.getDosis());
@@ -254,7 +278,7 @@ public class Sender  {
 				//if there is posology, just append the remark
 				if (actualLine.getDosis().length() > 0) {
 					
-					Products[i].setRemark(actualLine.getDosis() + ", " + actualLine.getBemerkung());
+					Products[i].setRemark(actualLine.getDosis() + ", " + actualLine.getBemerkung()); //$NON-NLS-1$
 				}
 				
 				else {
@@ -315,7 +339,7 @@ public class Sender  {
 				this.presID = response.getPrescriptionID();
 				this.QRCode = response.getQRCodeString();
 				
-				System.out.println("Success");	
+				System.out.println("Success");	 //$NON-NLS-1$
 					
 				
 				return true;
@@ -326,7 +350,7 @@ public class Sender  {
 			 
         } catch (Exception ex) {
             
-            System.out.println( "Exception: " + ex);
+            System.out.println( "Exception: " + ex); //$NON-NLS-1$
       
        }
 		 

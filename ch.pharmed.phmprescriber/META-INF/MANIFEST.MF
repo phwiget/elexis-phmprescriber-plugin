@@ -15,5 +15,6 @@ Import-Package: org.eclipse.core.databinding,
  org.eclipse.core.databinding.observable.value,
  org.eclipse.core.runtime;version="3.4.0",
  org.eclipse.core.runtime.jobs,
- org.eclipse.jface.databinding.swt
+ org.eclipse.jface.databinding.swt,
+ org.osgi.framework;version="1.7.0"
 Export-Package: ch.pharmed.phmprescriber

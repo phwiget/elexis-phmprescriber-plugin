@@ -5,6 +5,9 @@
 
 package ch.pharmed.phmprescriber;
 
+import java.util.Locale;
+import java.util.ResourceBundle;
+
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -47,13 +50,21 @@ public class PhMPreferencePage extends PreferencePage implements IWorkbenchPrefe
 	private Button btngetAddress;
 	private Button btnCboInteraction;
 
-	
+	private ResourceBundle messages;
 	/**
 	 * Create the preference page.
 	 */
 	public PhMPreferencePage(){
 		
-		
+		String language = "de";
+        String country = "CH";
+        
+		Locale currentLocale;
+                
+		currentLocale = new Locale(language, country);
+
+        messages = ResourceBundle.getBundle("ch.pharmed.phmprescriber.MessagesBundle", currentLocale);
+
 	}
 	
 	/**
@@ -83,15 +94,15 @@ public class PhMPreferencePage extends PreferencePage implements IWorkbenchPrefe
 		Group zsrgroup = new Group(container, SWT.None);
 		zsrgroup.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		zsrgroup.setLayout(new GridLayout(2, false));
-		zsrgroup.setText("Einstellung für die Rezeptübermittlung via PhM Prescriber");
+		zsrgroup.setText(messages.getString("PhMPreferencePage_0"));
 		
 		Label lblZSR = new Label(zsrgroup, SWT.NONE);
 		lblZSR.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblZSR.setText("ZSR-Nummer: ");
+		lblZSR.setText(messages.getString("PhMPreferencePage_1"));
 		
 		textboxZSRid = new Text(zsrgroup, SWT.BORDER);
 		textboxZSRid.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false, 1, 1));
-		textboxZSRid.setMessage("ZSR eingeben");
+		textboxZSRid.setMessage(messages.getString("PhMPreferencePage_2"));
 		
 		//(2) Button for requesting the address
 		compAddress = new Composite(container, SWT.NONE);
@@ -101,7 +112,7 @@ public class PhMPreferencePage extends PreferencePage implements IWorkbenchPrefe
 		SelectionListener AddressSL = new AddressSelectionButtonListener();
 		
 		btngetAddress = new Button(compAddress, SWT.PUSH);
-		btngetAddress.setText("Personalien automatisch abrufen");
+		btngetAddress.setText(messages.getString("PhMPreferencePage_3"));
 		btngetAddress.addSelectionListener(AddressSL);
 		
 		
@@ -109,40 +120,40 @@ public class PhMPreferencePage extends PreferencePage implements IWorkbenchPrefe
 		Group addressgroup = new Group(container, SWT.None);
 		addressgroup.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		addressgroup.setLayout(new GridLayout(4, false));
-		addressgroup.setText("Aufzudruckende Personalien (angezeigt auf Rezept)");
+		addressgroup.setText(messages.getString("PhMPreferencePage_4"));
 		
 		Label lblAnrede = new Label(addressgroup, SWT.NONE);
 		lblAnrede.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblAnrede.setText("Anrede ");
+		lblAnrede.setText(messages.getString("PhMPreferencePage_5"));
 		
 		textboxTitle = new Text(addressgroup, SWT.BORDER);
 		textboxTitle.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false, 1, 1));
-		textboxTitle.setMessage("Dr. med. o.ä.");
+		textboxTitle.setMessage(messages.getString("PhMPreferencePage_6"));
 		
 		Label lblFirstname = new Label(addressgroup, SWT.NONE);
 		lblFirstname.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblFirstname.setText("Vorname ");
+		lblFirstname.setText(messages.getString("PhMPreferencePage_7"));
 		
 		textboxFirstname = new Text(addressgroup, SWT.BORDER);
 		textboxFirstname.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false, 1, 1));
 	
 		Label lblLastname = new Label(addressgroup, SWT.NONE);
 		lblLastname.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblLastname.setText("Nachname ");
+		lblLastname.setText(messages.getString("PhMPreferencePage_8"));
 		
 		textboxLastname= new Text(addressgroup, SWT.BORDER);
 		textboxLastname.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false, 1, 1));
 		
 		Label lblStreet = new Label(addressgroup, SWT.NONE);
 		lblStreet.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblStreet.setText("Strasse ");
+		lblStreet.setText(messages.getString("PhMPreferencePage_9"));
 		
 		textboxStreet = new Text(addressgroup, SWT.BORDER);
 		textboxStreet.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false, 1, 1));
 		
 		Label lblPobo = new Label(addressgroup, SWT.NONE);
 		lblPobo.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblPobo.setText("Hausnummer ");
+		lblPobo.setText(messages.getString("PhMPreferencePage_10"));
 		
 		textboxPostbox = new Text(addressgroup, SWT.BORDER);
 		textboxPostbox.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false, 1, 1));
@@ -150,14 +161,14 @@ public class PhMPreferencePage extends PreferencePage implements IWorkbenchPrefe
 	
 		Label lblZip = new Label(addressgroup, SWT.NONE);
 		lblZip.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblZip.setText("PLZ ");
+		lblZip.setText(messages.getString("PhMPreferencePage_11"));
 		
 		textboxZip = new Text(addressgroup, SWT.BORDER);
 		textboxZip.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false, 1, 1));
 		
 		Label lblCity = new Label(addressgroup, SWT.NONE);
 		lblCity.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblCity.setText("Ort ");
+		lblCity.setText(messages.getString("PhMPreferencePage_12"));
 		
 		textboxCity = new Text(addressgroup, SWT.BORDER);
 		textboxCity.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false, 1, 1));
@@ -165,7 +176,7 @@ public class PhMPreferencePage extends PreferencePage implements IWorkbenchPrefe
 		
 		Label lblPhone = new Label(addressgroup, SWT.NONE);
 		lblPhone.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblPhone.setText("Telefon ");
+		lblPhone.setText(messages.getString("PhMPreferencePage_13"));
 		
 		textboxPhone = new Text(addressgroup, SWT.BORDER);
 		textboxPhone.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false, 1, 1));
@@ -173,28 +184,28 @@ public class PhMPreferencePage extends PreferencePage implements IWorkbenchPrefe
 	
 		Label lblFax = new Label(addressgroup, SWT.NONE);
 		lblFax.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblFax.setText("Fax ");
+		lblFax.setText(messages.getString("PhMPreferencePage_14"));
 		
 		textboxFax = new Text(addressgroup, SWT.BORDER);
 		textboxFax.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false, 1, 1));
 		
 		Label lblGLNid = new Label(addressgroup, SWT.NONE);
 		lblGLNid.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblGLNid.setText("GLN ");
+		lblGLNid.setText(messages.getString("PhMPreferencePage_15"));
 		
 		textboxGLNid = new Text(addressgroup, SWT.BORDER);
 		textboxGLNid.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false, 1, 1));
 
 		Label lblSpecialty1 = new Label(addressgroup, SWT.NONE);
 		lblSpecialty1.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblSpecialty1.setText("Fachrichtung ");
+		lblSpecialty1.setText(messages.getString("PhMPreferencePage_16"));
 		
 		textboxSpecialty1 = new Text(addressgroup, SWT.BORDER);
 		textboxSpecialty1.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false, 1, 1));
 		
 		Label lblSpecialty2 = new Label(addressgroup, SWT.NONE);
 		lblSpecialty2.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblSpecialty2.setText("Spezialisierung ");
+		lblSpecialty2.setText(messages.getString("PhMPreferencePage_17"));
 		
 		textboxSpecialty2 = new Text(addressgroup, SWT.BORDER);
 		textboxSpecialty2.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false, 1, 1));
@@ -210,14 +221,14 @@ public class PhMPreferencePage extends PreferencePage implements IWorkbenchPrefe
 		
 		btnCboInteraction = new Button(compInteraction, SWT.CHECK);
 		btnCboInteraction.setData(Constants.CFG_INTERATCIONS);
-		btnCboInteraction.setText("Rezept auf Interaktionen prüfen");
+		btnCboInteraction.setText(messages.getString("PhMPreferencePage_18"));
 		btnCboInteraction.addSelectionListener(interactionSL);
 		
 		
 		String interactionsEnabled =
 			CoreHub.globalCfg.get(Constants.CFG_INTERATCIONS,
 					Constants.CFG_INTERATCIONS);
-		if (interactionsEnabled.equals("true")) {
+		if (interactionsEnabled.equals("true")) { //$NON-NLS-1$
 			btnCboInteraction.setSelection(true);
 		}
 		
@@ -281,10 +292,10 @@ public class PhMPreferencePage extends PreferencePage implements IWorkbenchPrefe
 		@Override
 		public void widgetSelected(SelectionEvent e){
 			
-			String interactionEnabled = "true";
+			String interactionEnabled = "true"; //$NON-NLS-1$
 			
 			if (!((Button) e.widget).getSelection()) 
-				interactionEnabled = "false";
+				interactionEnabled = "false"; //$NON-NLS-1$
 														
 			//Store the value in the preferences
 					
@@ -319,25 +330,25 @@ public class PhMPreferencePage extends PreferencePage implements IWorkbenchPrefe
 	 */
 	private String createCFGString(){
 		
-		String returnValue = "";
+		String returnValue = ""; //$NON-NLS-1$
 		
-	    returnValue += textboxZSRid.getText().replace(";", "") + ";";
-		returnValue += textboxGLNid.getText().replace(";", "") + ";";
+	    returnValue += textboxZSRid.getText().replace(";", "") + ";"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		returnValue += textboxGLNid.getText().replace(";", "") + ";"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		
-		returnValue += textboxTitle.getText().replace(";", "") + ";";
-		returnValue += textboxFirstname.getText().replace(";", "") + ";";
-		returnValue += textboxLastname.getText().replace(";", "") + ";";
+		returnValue += textboxTitle.getText().replace(";", "") + ";"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		returnValue += textboxFirstname.getText().replace(";", "") + ";"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		returnValue += textboxLastname.getText().replace(";", "") + ";"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		
-		returnValue += textboxStreet.getText().replace(";", "") + ";";
-		returnValue += textboxPostbox.getText().replace(";", "") + ";";
-		returnValue += textboxZip.getText().replace(";", "") + ";";
-		returnValue += textboxCity.getText().replace(";", "") + ";";
+		returnValue += textboxStreet.getText().replace(";", "") + ";"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		returnValue += textboxPostbox.getText().replace(";", "") + ";"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		returnValue += textboxZip.getText().replace(";", "") + ";"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		returnValue += textboxCity.getText().replace(";", "") + ";"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		
-		returnValue += textboxPhone.getText().replace(";", "") + ";";
-		returnValue += textboxFax.getText().replace(";", "") + ";";
+		returnValue += textboxPhone.getText().replace(";", "") + ";"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		returnValue += textboxFax.getText().replace(";", "") + ";"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		
-		returnValue += textboxSpecialty1.getText().replace(";", "") + ";";
-		returnValue += textboxSpecialty2.getText().replace(";", "");
+		returnValue += textboxSpecialty1.getText().replace(";", "") + ";"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		returnValue += textboxSpecialty2.getText().replace(";", ""); //$NON-NLS-1$ //$NON-NLS-2$
 		
 		return returnValue;
 							

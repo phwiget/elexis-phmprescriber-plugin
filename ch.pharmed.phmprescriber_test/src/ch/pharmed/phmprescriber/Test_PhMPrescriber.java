@@ -31,7 +31,15 @@ public class Test_PhMPrescriber {
 		if (PlatformUI.getWorkbench() != null) // null if run from Eclipse-IDE
 		{
 			// needed if run as surefire test from using mvn install
-			//PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().closeAllPerspectives(false, true);
+			try {
+				
+				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().closeAllPerspectives(false, true);
+			} catch (Exception e) {
+				
+				System.out.println(e.getMessage());
+			}
+			
+			
 		}
 	}
 

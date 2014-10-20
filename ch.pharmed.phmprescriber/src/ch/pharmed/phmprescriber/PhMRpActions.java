@@ -6,16 +6,22 @@
 package ch.pharmed.phmprescriber;
 
 
+import java.net.URL;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.HelpListener;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Shell;
+
+
+import org.eclipse.ui.internal.util.BundleUtility;
+import org.osgi.framework.Bundle;
 
 import ch.elexis.core.data.events.ElexisEventDispatcher;
 import ch.elexis.core.data.interfaces.IOutputter;
@@ -25,14 +31,43 @@ import ch.elexis.data.Rezept;
 public class PhMRpActions  implements IAction, IOutputter {
 
 	
-	private String opID = "ch.pharmed.id";
-	private String opDescription ="Rezept an Apotheke Ihrer Wahl übermitteln";
-	private String optooltiptext = "Übermitteln und drucken";
-	private String opText = "Senden";
-	public static final String PLUGIN_ID = "ch.pharmed.phmprescriber";
+	private static final String opID = "ch.pharmed.phmprescriber"; //$NON-NLS-1$
+	private String opDescription;
+	private String optooltiptext;;
+	private String opText;
+	public static final String PLUGIN_ID = "ch.pharmed.phmprescriber"; //$NON-NLS-1$
   
-  
+	private ImageDescriptor imgDescr;
+	private String toolTipText;
+	private int style;
+	private String text;
+	private int keycode;
+	private ResourceBundle messages;
+	
+	//Constructor
+	public PhMRpActions() {
+		
+		this.messages = ResourceBundle.getBundle("ch.pharmed.phmprescriber.MessagesBundle",  new Locale("de", "CH"));
+		
+		this.style = AS_PUSH_BUTTON;
+		this.setImageDescriptor(createImageDescriptor());
+		this.setToolTipText(messages.getString("PhMRpActions_2"));
+		this.setText(messages.getString("PhMRpActions_3"));
+		this.setAccelerator(SWT.CTRL | 'N');
+		
+	}
 
+	
+	private ImageDescriptor createImageDescriptor() {
+		
+		Bundle bundle = Platform.getBundle("ch.pharmed.phmprescriber"); //$NON-NLS-1$
+		URL fullPathString = BundleUtility.find(bundle, "icons/logo_elexis.png"); //$NON-NLS-1$
+				
+		return ImageDescriptor.createFromURL(fullPathString);
+				
+	}
+	
+	
 	@Override
 	public String getOutputterID() {
 		// TODO Auto-generated method stub
@@ -42,13 +77,13 @@ public class PhMRpActions  implements IAction, IOutputter {
 	@Override
 	public String getOutputterDescription() {
 		// TODO Auto-generated method stub
-		return opDescription;
+		return  messages.getString("PhMRpActions_1");
 	}
 
 	@Override
 	public Object getSymbol() {
 
-	
+
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -63,7 +98,7 @@ public class PhMRpActions  implements IAction, IOutputter {
 	@Override
 	public int getAccelerator() {
 		// TODO Auto-generated method stub
-		return 0;
+		return this.keycode;
 	}
 
 	@Override
@@ -104,8 +139,9 @@ public class PhMRpActions  implements IAction, IOutputter {
 
 	@Override
 	public ImageDescriptor getImageDescriptor() {
-
-		return null;
+		
+		return this.imgDescr;
+		
 	}
 
 	@Override
@@ -116,21 +152,22 @@ public class PhMRpActions  implements IAction, IOutputter {
 
 	@Override
 	public int getStyle() {
+
 		// TODO Auto-generated method stub
-		return AS_PUSH_BUTTON;
+		return this.style;
 	}
 
 	@Override
 	public String getText() {
 		
 		// TODO Auto-generated method stub
-		return opText;
+		return this.text;
 	}
 
 	@Override
 	public String getToolTipText() {
 		// TODO Auto-generated method stub
-		return optooltiptext;
+		return this.toolTipText;
 	}
 
 	@Override
@@ -161,7 +198,7 @@ public class PhMRpActions  implements IAction, IOutputter {
 	public void run() {
 		// TODO Auto-generated method stub
 
-		System.out.println("Test");
+		System.out.println("Test"); //$NON-NLS-1$
 		
 	}
 
@@ -227,7 +264,8 @@ public class PhMRpActions  implements IAction, IOutputter {
 
 	@Override
 	public void setImageDescriptor(ImageDescriptor newImage) {
-		// TODO Auto-generated method stub
+
+		this.imgDescr = newImage;
 
 	}
 
@@ -240,19 +278,23 @@ public class PhMRpActions  implements IAction, IOutputter {
 	@Override
 	public void setText(String text) {
 		// TODO Auto-generated method stub
+		this.text = text;
 
 	}
 
 	@Override
 	public void setToolTipText(String text) {
-		// TODO Auto-generated method stub
+
+		this.toolTipText = text;
 
 	}
 
 	@Override
 	public void setAccelerator(int keycode) {
 		// TODO Auto-generated method stub
+		this.keycode = keycode;
 
 	}
+	
 
 }
